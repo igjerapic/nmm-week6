@@ -1,0 +1,10 @@
+# General
+*.sh
+*.lammps
+exclude-list
+
+# assignment 1
+*.dcd
+*.data
+*.restart
+
