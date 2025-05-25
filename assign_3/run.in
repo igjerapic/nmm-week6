@@ -1,0 +1,67 @@
+
+
+units           lj
+atom_style      full
+dimension       3
+boundary        p p p
+timestep        0.005
+
+read_data       packed.data
+
+bond_style      fene
+bond_coeff      * 30.0 1.5 1.0 1.0
+special_bonds   fene
+
+variable        runtime equal 1000000
+variable        Temp equal 1.0
+variable        velSeed equal 926458
+
+velocity        all create ${Temp} ${velSeed}
+
+### Output
+thermo_style    custom step temp density press etotal pe ke epair spcpu
+thermo          1000
+
+###########################################################################
+# Soft relaxation (to remove overlaps of particles)
+######################################################################
+
+pair_style      soft 1.0
+pair_coeff      * * 0.0
+variable        prefactor equal ramp(0,300)
+fix             rampSoft all adapt 1 pair soft a * * v_prefactor
+
+minimize        0.0 1.0e-8 1000 100000
+
+fix             nvtSoft all nvt temp ${Temp} ${Temp} 0.5
+run             100000
+unfix           nvtSoft
+unfix           rampSoft
+reset_timestep  0
+
+write_data      relaxed.data
+
+###########################################################################
+# Full LJ
+######################################################################
+
+# The last coefficient (r_cut_ij) is optional. If not specified, the global LJ cutoff (r_cut_global) specified in the pair_style command is used.
+pair_style      lj/cut <r_cut_global>
+pair_coeff      <type_1>  <type_1>  <eps_11>  <sigma_11>  [<r_cut_11>]
+pair_coeff      <type_1>  <type_2>  <eps_12>  <sigma_12>  [<r_cut_12>]
+#pair_coeff        .         .          .         .            .
+#pair_coeff        .         .          .         .            .
+pair_coeff      <type_i>  <type_j>  <eps_ij>  <sigma_ij>  [<r_cut_ij>]
+#pair_coeff        .         .          .         .            .
+#pair_coeff        .         .          .         .            .
+
+fix             noDrift all momentum 10 linear 1 1 1
+fix             nvt1 all nvt temp ${Temp} ${Temp} 0.5
+dump            1 all custom 1000 self_assemble.lammpstrj id type xu yu zu vx vy vz
+
+run             ${runtime}
+
+write_data      assembled.data nofix nocoeff
+
+
+

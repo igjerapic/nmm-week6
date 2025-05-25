@@ -1,0 +1,60 @@
+
+
+units         lj
+atom_style    full
+dimension     3
+boundary      p p p
+neighbor      1.0 bin
+neigh_modify  one 8000 every 1
+#comm_modify   cutoff 10.0
+
+
+read_data    salt_added_1000.data
+
+bond_style    fene
+bond_coeff    * 30.0 1.5 1.0 1.0
+special_bonds lj 0.0 1.0 1.0 coul 1.0 1.0 1.0
+
+kspace_style  pppm 1.0e-4
+dielectric    1.0
+
+set           type 1 charge 1.0
+set           type 3 charge 1.0
+set           type 2 charge -1.0
+set           type 4 charge -1.0
+
+pair_style    lj/cut/coul/long 1.12 8.0
+pair_coeff    * * 1.0 1.0
+
+variable      Temp equal 1.0
+variable      Press equal 0.0
+variable      dt equal 0.01
+variable      Tdamping equal 100*${dt}
+variable      velSeed equal 239567
+variable      dumpfile string 'traj_salt.lammpstrj'
+variable      finalfile string 'final.data'
+
+thermo        100
+thermo_style  custom step temp ebond epair ke etotal enthalpy vol press spcpu
+
+velocity      all create ${Temp} ${velSeed}
+timestep      ${dt}
+
+
+group         poly type 1 2
+fix           freeze poly setforce 0.0 0.0 0.0
+minimize      1.0e-4  1.0e-6  1000 10000
+unfix         freeze
+
+balance       0.9 shift y 20 1.0
+dump          1 all custom 1000 ${dumpfile} id type xu yu zu  vx vy vz
+fix           stabilize all momentum 5 linear 1 1 1
+fix           nvt1 all nvt temp ${Temp} ${Temp} ${Tdamping}
+run           25000
+
+fix           bal all balance 40000 0.9 shift y 20 1.0
+
+run           1000000
+write_data    ${finalfile} nocoeff nofix
+
+
