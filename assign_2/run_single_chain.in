@@ -31,11 +31,12 @@ thermo          10000
 thermo_modify   line yaml format none
 
 # The last coefficient (r_cut_ij) is optional. If not specified, the global LJ cutoff (r_cut_global) specified in the pair_style command is used.
-pair_style      lj/cut <r_cut_global>
-pair_coeff      <type_i>  <type_j>  <eps_ij>  <sigma_ij>  [<r_cut_ij>]
+# pair_style      lj/cut <r_cut_global>
+# pair_coeff      <type_i>  <type_j>  <eps_ij>  <sigma_ij>  [<r_cut_ij>]
 
-pair_style      lj/cut 2.5
-pair_coeff      * ${EPSILONLJ} 1.0
+pair_style      lj/cut ${CUTOFF}
+pair_coeff      * * ${EPSILONLJ} 1.0
+pair_modify     shift yes
 
 fix             lng all langevin ${Temp} ${Temp} ${Tdamping} ${velSeed}
 fix             nve1 all nve
