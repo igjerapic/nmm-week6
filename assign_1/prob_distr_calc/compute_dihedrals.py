@@ -87,8 +87,8 @@ def main():
     popt = fit_dihedral_function(x, y)
 
     # Optional saving
-    save_plot_path = None # e.g., "dihedral_dist_plot.jpg"
-    save_data_path = None # e.g., "dihedral_distribution.txt"
+    save_plot_path = "dihedral_dist_plot.svg" # e.g., "dihedral_dist_plot.jpg"
+    save_data_path = "dihedral_distribution.txt" # e.g., "dihedral_distribution.txt"
 
     kT = 0.59616113  # kT = 0.59616113 Kcal/mol at 300 K
     print('dihedral_style    nharmonic')

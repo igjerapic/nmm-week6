@@ -79,8 +79,8 @@ def main():
     start, end = 0, 2000
     step = 0.1
     x_range = (2.5, 5.0)
-    save_plot_path = None  # e.g., "bond_dist_plot.jpg"
-    save_data_path = None  # e.g., "bond_distribution.txt"
+    save_plot_path = "bond_dist_plot.svg"  # e.g., "bond_dist_plot.jpg"
+    save_data_path = "bond_distribution.txt"  # e.g., "bond_distribution.txt"
 
     u = load_universe(data_file, traj_file)
     bonds = compute_bond_distances(u, start, end)

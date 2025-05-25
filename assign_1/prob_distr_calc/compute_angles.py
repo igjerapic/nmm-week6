@@ -80,8 +80,8 @@ def main():
     traj_file = "../unwrapped_traj.dcd"
 
     # Optional save paths
-    save_plot_path = None # e.g., "angle_dist_plot.jpg"
-    save_data_path = None # e.g., "angle_distribution.txt"
+    save_plot_path = "angle_dist_plot.svg" # e.g., "angle_dist_plot.jpg"
+    save_data_path = "angle_dist.txt" # e.g., "angle_distribution.txt"
 
     # Parameters
     start_frame, end_frame = 0, 2000
