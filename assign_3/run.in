@@ -12,7 +12,7 @@ bond_style      fene
 bond_coeff      * 30.0 1.5 1.0 1.0
 special_bonds   fene
 
-variable        runtime equal 1000000
+variable        runtime equal 20000000
 variable        Temp equal 1.0
 variable        velSeed equal 926458
 
@@ -46,14 +46,10 @@ write_data      relaxed.data
 ######################################################################
 
 # The last coefficient (r_cut_ij) is optional. If not specified, the global LJ cutoff (r_cut_global) specified in the pair_style command is used.
-pair_style      lj/cut <r_cut_global>
-pair_coeff      <type_1>  <type_1>  <eps_11>  <sigma_11>  [<r_cut_11>]
-pair_coeff      <type_1>  <type_2>  <eps_12>  <sigma_12>  [<r_cut_12>]
-#pair_coeff        .         .          .         .            .
-#pair_coeff        .         .          .         .            .
-pair_coeff      <type_i>  <type_j>  <eps_ij>  <sigma_ij>  [<r_cut_ij>]
-#pair_coeff        .         .          .         .            .
-#pair_coeff        .         .          .         .            .
+pair_style      lj/cut 2.5
+pair_coeff      1  1  1.0  1.0  2.5
+pair_coeff      1  2  1.0  1.0  1.14556
+pair_coeff     2  2  1.0  1.0  1.14226
 
 fix             noDrift all momentum 10 linear 1 1 1
 fix             nvt1 all nvt temp ${Temp} ${Temp} 0.5

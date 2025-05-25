@@ -134,8 +134,17 @@ def generate_mol(BB_length, SC_length, graft_freq, sequence, filetype='mol'):
 
 
 if __name__ == '__main__':
-    generate_mol(BB_length=16, SC_length=5, graft_freq=1, sequence='ABA', filetype='data')
-    generate_mol(BB_length=16, SC_length=5, graft_freq=1, sequence='ABA', filetype='mol')
+    # generate_mol(BB_length=16, SC_length=5, graft_freq=1, sequence='ABA', filetype='data')
+    # generate_mol(BB_length=16, SC_length=5, graft_freq=1, sequence='ABA', filetype='mol')
+
+    # Alternating
+    generate_mol(BB_length=64, SC_length=0, graft_freq=1, sequence='ABBABBA', filetype='data')
+    generate_mol(BB_length=64, SC_length=0, graft_freq=1, sequence='ABBABBA', filetype='mol')
+
+    # bottlebrush
+    generate_mol(BB_length=16, SC_length=8, graft_freq=6, sequence='ABBA', filetype='data')
+    generate_mol(BB_length=16, SC_length=8, graft_freq=6, sequence='ABBA', filetype='mol')
+
 #    generate_mol(BB_length=40, SC_length=5, graft_freq=1, sequence='ABAB', filetype='mol')
 #    generate_mol(BB_length=20, SC_length=0, graft_freq=5, sequence='AB', filetype='data')
 
