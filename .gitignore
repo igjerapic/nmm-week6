@@ -4,7 +4,20 @@
 exclude-list
 
 # assignment 1
-*.dcd
-*.data
-*.restart
+assign_1/*.dcd
+assign_1/*.data
+assign_1/*.restart
+
+# assignment 2
+assign_2/epsilon*
+assign_2/test_topos
+
+# assignment 3
+assign_3/bottlebrush
+assign_3/test_topos
+assign_3/linear
+
+# assignment 4
+assign_4/salt*
+
 
