@@ -1,13 +1,19 @@
 
 
 # side length of the box
-variable      L equal 35
+variable      eta equal 0.2         # packing fraction
+variable      num_beads equal 64
+variable      sigma equal 1.0
+variable      partile_volume equal (4.0/3.0)*PI*(0.5${sigma})^3
+variable      total_volume equal ${N}*${partile_volume}
+
+variable      L equal (${total_volume}/${eta})^(1.0/3.0)
 
 # molecule file that defines a single polymer chain
-variable      molecule_file string 'polymer_ABA.mol'
+variable      molecule_file string ${TOPO_FILE}
 
 # number of chains to pack into the box
-variable      num_chains equal 50
+variable      num_chains equal 150
 
 # file name to write to after packing the box with chains
 variable      finalfile string 'packed.data'
