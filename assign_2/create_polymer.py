@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 
 def generate_mol(BB_length, SC_length, graft_freq, sequence, filetype='mol'):
@@ -136,8 +138,9 @@ def generate_mol(BB_length, SC_length, graft_freq, sequence, filetype='mol'):
 # Example usage
 if __name__ == '__main__':
 #    generate_mol(BB_length=40, SC_length=5, graft_freq=1, sequence='ABAB', filetype='data')
-    generate_mol(BB_length=20, SC_length=0, graft_freq=1, sequence='A', filetype='data')
-    generate_mol(BB_length=20, SC_length=0, graft_freq=1, sequence='A', filetype='mol')
+    chain_length = int(sys.argv[1])
+    generate_mol(BB_length=chain_length, SC_length=0, graft_freq=1, sequence='A', filetype='data')
+    generate_mol(BB_length=chain_length, SC_length=0, graft_freq=1, sequence='A', filetype='mol')
 #    generate_mol(BB_length=40, SC_length=5, graft_freq=1, sequence='ABAB', filetype='mol')
 #    generate_mol(BB_length=20, SC_length=0, graft_freq=5, sequence='AB', filetype='data')
 
