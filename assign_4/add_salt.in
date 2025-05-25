@@ -12,10 +12,10 @@ variable      slab_width equal ${Lxz}*1.5
 variable      slab_width_half equal ${slab_width}/2
 variable      slab_width_half_padded equal ${slab_width_half}+12
 
-variable      startfile string 'equilibrated.data'
+variable      startfile string '../equilibrated.data'
 
 # number of salt beads to add
-variable      salt equal 1000
+variable      salt equal ${N_SALT}
 variable      salt_half equal round(${salt}/2)
 
 variable      finalfile string 'salt_added_${salt}.data'
