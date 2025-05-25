@@ -34,6 +34,9 @@ thermo_modify   line yaml format none
 pair_style      lj/cut <r_cut_global>
 pair_coeff      <type_i>  <type_j>  <eps_ij>  <sigma_ij>  [<r_cut_ij>]
 
+pair_style      lj/cut 2.5
+pair_coeff      * ${EPSILONLJ} 1.0
+
 fix             lng all langevin ${Temp} ${Temp} ${Tdamping} ${velSeed}
 fix             nve1 all nve
 
