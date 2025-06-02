@@ -3,6 +3,16 @@
 *.lammps
 exclude-list
 *.pkl
+
+# report
+report/out_dir/*.aux
+report/out_dir/*.fdb_latexmk
+report/out_dir/*.fls
+report/out_dir/*.log
+report/out_dir/*.out
+report/out_dir/*.synctex.gz
+report/out_dir/*.toc
+report/sections
 # assignment 1
 assign_1/*.dcd
 assign_1/*.data
