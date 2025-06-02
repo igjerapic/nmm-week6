@@ -2,15 +2,19 @@
 *.sh
 *.lammps
 exclude-list
-
+*.pkl
 # assignment 1
 assign_1/*.dcd
 assign_1/*.data
 assign_1/*.restart
+assign_1/*.png
+assign_1/*.svg
 
 # assignment 2
 assign_2/epsilon*
 assign_2/test_topos
+assign_2/short_run
+assign_2/*.svg
 
 # assignment 3
 assign_3/bottlebrush
