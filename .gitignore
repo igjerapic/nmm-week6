@@ -13,6 +13,8 @@ report/out_dir/*.out
 report/out_dir/*.synctex.gz
 report/out_dir/*.toc
 report/sections
+report/figs/*.svg
+
 # assignment 1
 assign_1/*.dcd
 assign_1/*.data
