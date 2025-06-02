@@ -4,7 +4,20 @@ from collections import Counter
 from scipy.optimize import curve_fit
 from MDAnalysis.core.universe import Universe
 from MDAnalysis.lib.distances import calc_dihedrals
+from cycler import cycler
 
+plt.style.use('../../scripts/default.mplstyle')
+plt.rcParams['axes.prop_cycle'] = plt.cycler(cycler(color = ['#332288', 
+                                    '#CC6677',
+                                    '#88CCEE',
+                                    '#DDCC77', 
+                                    '#117733', 
+                                    '#882255', 
+                                    '#44AA99', 
+                                    '#999933', 
+                                    '#AA4499',
+                                    '#DDDDDD'
+                                ]))
 
 def load_universe(data_path, traj_path):
     return Universe(data_path, traj_path, format="LAMMPS")
@@ -55,7 +68,7 @@ def fit_dihedral_function(x, y):
 
 def plot_distribution(x, y, model_func, popt, save_path=None):
     xx = np.linspace(x.min(), x.max(), 100)
-    fig, ax = plt.subplots(figsize=(5, 3.8))
+    fig, ax = plt.subplots()
     ax.set_xlim(x.min(), x.max())
     ax.set_ylim(0, max(y) * 1.1)
     ax.set_xlabel(r"$\Phi_{A-A-A-A} \; (\mathrm{^\circ})$")

@@ -4,7 +4,20 @@ from scipy.optimize import curve_fit
 from collections import Counter
 from MDAnalysis.core.universe import Universe
 from MDAnalysis.lib.distances import calc_angles
+from cycler import cycler
 
+plt.style.use('../../scripts/default.mplstyle')
+plt.rcParams['axes.prop_cycle'] = plt.cycler(cycler(color = ['#332288', 
+                                    '#CC6677',
+                                    '#88CCEE',
+                                    '#DDCC77', 
+                                    '#117733', 
+                                    '#882255', 
+                                    '#44AA99', 
+                                    '#999933', 
+                                    '#AA4499',
+                                    '#DDDDDD'
+                                ]))
 
 def load_universe(data_file, traj_file, format="LAMMPS"):
     return Universe(data_file, traj_file, format=format)
@@ -56,7 +69,7 @@ def fit_distribution(x, y, initial_guess=[1, 2.0, 1, 1, 1]):
 
 def plot_distribution(x, y, popt, xlabel, ylabel, save_path=None):
     xx = np.linspace(x.min(), x.max(), 100)
-    fig, ax = plt.subplots(figsize=(5, 3.8))
+    fig, ax = plt.subplots()
     ax.set_xlim(x.min(), x.max())
     ax.set_ylim(0, max(y) * 1.1)
     ax.set_xlabel(xlabel)
