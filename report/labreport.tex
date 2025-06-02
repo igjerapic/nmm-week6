@@ -1,0 +1,195 @@
+\documentclass[10pt,a4paper]{labreport}
+\usepackage{csquotes}
+\usepackage{titlesec}
+\usepackage{ragged2e}
+\usepackage{siunitx}
+\usepackage{setspace}
+\usepackage{longtable}
+\usepackage{rotating}
+\usepackage{xurl}
+\usepackage{physics}
+\usepackage{caption}
+\usepackage{wrapfig}
+\usepackage{tabularray}
+\usepackage{fancyhdr}
+\usepackage{subcaption}
+\usepackage{lscape}
+\usepackage{tensor}
+\usepackage{multirow}
+\usepackage[gen]{eurosym}
+\usepackage{float}
+\usepackage{bm}
+\usepackage{lipsum}
+\usepackage{parskip}
+\usepackage{booktabs}
+\usepackage{enumerate}
+\usepackage[justification=justified]{caption}
+\usepackage[nottoc]{tocbibind}
+\usepackage{hyperref}
+%  \usepackage[
+% backend=biber,
+% style=chem-acs,articletitle=true,doi=true]{biblatex}
+% %\addbibresource{references.bib}
+\usepackage{color}
+
+\usepackage{listings}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codepurple},
+    numberstyle=\tiny\color{codegray},
+   % stringstyle=\color{grey},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=5
+}
+\lstset{style=mystyle}
+
+
+
+
+\title{Nanoscale Material Modelling
+\\
+\normalsize{Week 6}} % Main title and sub title. 
+
+\author{Ilija A. Gjerapić, S4437586; \href{mailto:i.a.gjerapic@student.rug.nl}{i.a.gjerapic@student.rug.nl}; \href{https://github.com/igjerapic/nmm-week1/}{@github} } % Name, student number, email
+
+\supervisors{prof. dr. A. Giuntoli, prof. dr. J. Slawinska}
+
+\begin{document}
+
+
+\maketitle
+\tableofcontents
+
+
+  
+
+\thispagestyle{firststyle}
+\newpage
+\section{Assignment 1: Who needs Atoms?}
+\begin{itemize}
+  \item[\textbf{1(a)}] \textbf{All Atom Model Information}
+  
+  Figure \ref{fig:ass1_PLA} shows the \texttt{Ovito} visualization of the \texttt{PLA\_CHARMM.data} file. Using the \texttt{Expresssion Selection} of the \texttt{MoleculeIdentifier} property resulting in a single monomer containing nine atoms: two oxygens, four hydrogens, and three carbon atoms. 
+  The polylatic acid was determined to made up of 50 monomers based on the number of carbons bounded to two oxygens. This method also includes the two monomers at the end, which consist of ten atoms each. Therefore, the entire system consists of 452 atoms.   
+  \begin{figure}[h]
+    \centering 
+    \includegraphics[width = 0.5\textwidth]{figs/ass1_PLA.png}
+    \caption{An \texttt{Ovito} snapshot of the all-atom model of polylatic acid with an isolated monomer in the middle of the chain shown. Hydrogen atoms are white, oxygen atoms red, and carbon atoms grey. The chemical structure is also shown for reference.}
+    \label{fig:ass1_PLA}
+  \end{figure}
+
+  \item[\textbf{1(b)}] \textbf{Defining Bonded Interactions of CG Model}
+  
+  To determine the bonded interactions of polylatic acid, the Boltzmann distribution of the energy
+  \begin{equation}
+    P(\epsilon_i) \propto \exp\left(-\frac{\epsilon_i}{k_B T}\right)
+    \label{eq:Boltzmann}
+  \end{equation} 
+  for the bond distance, bond angle, and dihedral are fitted against their respective distributions collected during equilibrium. 
+  Figure \ref{fig:ass1_equilib} demonstrates that equilibrium was reached prior to running the production run from which the bond distance, angle and dihedral distributions were determined.  
+  \begin{figure}[h]
+    \centering 
+    \includegraphics[width = 0.9\textwidth]{figs/ass1_equilib.png}
+    \caption{The development of several thermodynamic properties during the equilibration run of polylatic acid. \textbf{(a)} shows the temperature, \textbf{(b)} the total energy, and \textbf{(c)} the bond-length, bond-angle, and dihedral energies. The inset in \textbf{(b)} shows an example configuration in equilibrium. }
+    \label{fig:ass1_equilib}
+  \end{figure}
+
+  The bonded interactions between monomers were separated into contributions from the bond-length $r$, bond angle $\theta$ and dihedral angle $\phi$.
+  The contribution from the bond-length between monomers was fitted against the \texttt{class2} bond style of LAMMPS
+  \begin{equation}
+    E_\text{bond} = K_{r,2}(r - r_0)^2 +   K_{r,3}(r - r_0)^3 +  K_{r,4}(r - r_0)^4,
+    \label{eq:ass1_bondEngery}
+  \end{equation}
+  where $K_{r,i}$ are coefficients describing the strength of each term while $r_0$ is the minimum engery bond length. 
+  Similarly, the bond angle between two CG beads was modelled as the \texttt{quartic} angle style:
+    \begin{equation}
+    E_\text{angle} = K_{\theta,2}(\theta - \theta_0)^2 +   K_{\theta,3}(\theta - \theta_0)^3 +  K_{\theta,4}(\theta - \theta_0)^4,
+    \label{eq:ass1_angleEngery}
+  \end{equation}
+  where $\theta_0$ is the bond angle of minimum energy and $K_{\theta,i}$ coefficients describing the contribution of term. 
+  Finally, the dihedral interaction between monomers was modelled as a sum of seven harmonics:
+  \begin{equation}
+    E_\text{dihed} = \sum_{i=1}^7 A_i \cos^{i-1}(\phi),
+    \label{eq:ass1_dihedEnergy}
+  \end{equation}
+
+  The actual CG beads were defined as the center of masses of each monomer, which was achieved using \texttt{residues} of the simulation.
+  
+  \begin{lstlisting}[language=Python, 
+    caption={An example on how the CG beads are defined from the all-atom simulation. The example is used when determining the bond lengths of the CG model.},
+    label=lst:ass1_residues,
+    ]
+  bond_lengths = []
+    residues = u.residues
+    for ts in u.trajectory[start:end]:
+        for i in range(1, len(residues) - 1):
+            res1 = residues[i]
+            res2 = residues[i + 1]
+            com1 = res1.atoms.center_of_mass(unwrap=True)
+            com2 = res2.atoms.center_of_mass(unwrap=True)
+            bond = calc_bonds(com1[np.newaxis, :], com2[np.newaxis, :], 
+                              box=u.dimensions)[0]
+            bond_lengths.append(bond)
+    return bond_lengths
+  \end{lstlisting}
+  
+  \item \textbf{Distribution of Bonds, Angles, and Dihedrals}
+  \begin{figure}[h]
+    \centering 
+    \includegraphics[width = 0.9\textwidth]{figs/ass1_probs.png}
+    \caption{The results of a single iteration of Boltzmann inversion for (a) the bond distance (b) the bond angle and (c) the dihedrals. The resepective fits correspond to the interaction potentials described earlier in the text. The resulting final bonded interaction is given in equation \eqref{eq:ass1_final_bondendEng}.}
+    \label{fig:ass1_distribs}
+  \end{figure}
+
+  The single-iteration Boltzmann inversion results in a final bonded interaction between CG beads of
+  \begin{equation}
+    \begin{split}
+      E_\text{bonded} &= K_{r,2}(r - r_0)^2 +   K_{r,3}(r - r_0)^3 +  K_{r,4}(r - r_0)^4 \\
+                      &~+ K_{\theta,2}(\theta - \theta_0)^2 +   K_{\theta,3}(\theta - \theta_0)^3 +  K_{\theta,4}(\theta - \theta_0)^4  \\
+                      &~~+ \sum_{i=1}^7 A_i \cos^{i-1}(\phi),
+    \end{split}
+    \label{eq:ass1_final_bondendEng}
+  \end{equation}
+  with coefficients
+  \begin{align*}
+    \bm{E}&_\textbf{bond}: && r_0 =  3.38588 \text{\AA} && K_{r,i} = \{5.99659, -16.18383, 19.99841\}\text{kcal/mol} \\
+    \bm{E}&_\textbf{angle}: && \theta_0 =  97.910908 ^\circ&& K_{\theta,i} = \{2.02467, -3.79927, 2.17714\}\text{kcal/mol} \\
+    \bm{E}&_\textbf{dihed}: && && A_i = \{3.55479, 0.22113, 0.01174, -0.15241, -0.37184, -0.07968, 0.29841\}\text{kcal/mol}
+  \end{align*}
+  
+\end{itemize}
+
+
+\newpage
+\section{Assignment 2: Out of Flatland}
+\subsection{Model Setup}
+
+\subsection{Results}
+
+\newpage
+\section{Assignment 3: Go with the Flow}
+\newpage
+% \printbibliography
+
+% \begin{appendices}
+%   \input{Appendix}
+% \end{appendices}
+
+\end{document}
+
+
+
