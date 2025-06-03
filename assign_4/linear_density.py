@@ -16,22 +16,23 @@ def compute_linear_density(atomgroup, trajectory_slice, axis, binsize = 1.0):
     num_bins = int(max_box_size / binsize)
 
     density_analyzer = lineardensity.LinearDensity(atomgroup, binsize=binsize)
+    print(density_analyzer)
     density_array = np.zeros((num_frames, num_bins))
 
     for idx, ts in enumerate(trajectory_slice):
-        density_analyzer.run(frames=[idx], verbose=False)
+        frame = ts.frame
+        density_analyzer.run(frames=[frame], verbose=False)
         density_array[idx,:] = density_analyzer.results[axis]['mass_density']
 
     return density_array
 
 def main():
     # Define the topology and trajectory files
-
     topology = "final.data"
     traj = "traj_salt.lammpstrj"
 
     u = bsa.setup_universe(topology, traj)
-
+    N_FRAMES = u.trajectory.n_frames
 
     # Group salts and polymers 
     polymer_atoms = u.select_atoms("type 1 or type 2")
@@ -39,16 +40,22 @@ def main():
 
     # Get linear densities of final N_FRAMES_SLICE frames    
     N_FRAMES_SLICE = 1
-    lin_dense_poly = compute_linear_density(polymer_atoms, u.trajectory[-N_FRAMES_SLICE:], axis="y", binsize= 1.0)
-    lin_dense_salt = compute_linear_density(salt_atoms, u.trajectory[-N_FRAMES_SLICE:], axis="y", binsize= 1.0)
+    BINSIZE = 3
+
+    y_vals = np.linspace(min(u.dimensions[:3]), max(u.dimensions[:3]), int(max(u.dimensions[:3])/ BINSIZE))
+
+    lin_dense_poly = compute_linear_density(polymer_atoms, u.trajectory[-N_FRAMES_SLICE:], axis="y", binsize= BINSIZE)
+    lin_dense_salt = compute_linear_density(salt_atoms, u.trajectory[-N_FRAMES_SLICE:], axis="y", binsize= BINSIZE)
+    plt.plot(y_vals, np.mean(lin_dense_poly, axis = 0))
+    plt.plot(y_vals, np.mean(lin_dense_salt, axis = 0))
+    plt.show()
+
 
     # Defining supernatent (S) and polymer (P) phase
-    tol = 0.2
-    mask_P = lin_dense_poly > (1 - tol) * np.max(lin_dense_poly) 
-    min_dense_poly = np.min(lin_dense_poly) if np.min(lin_dense_poly) != 0 else tol * np.max(lin_dense_poly) 
+    TOLERANCE = 0.2
+    mask_P = lin_dense_poly > (1 - TOLERANCE) * np.max(lin_dense_poly) 
+    min_dense_poly = np.min(lin_dense_poly) if np.min(lin_dense_poly) != 0 else TOLERANCE * np.max(lin_dense_poly) 
     mask_S = lin_dense_poly <= min_dense_poly 
-    print(min_dense_poly)
-    print(np.partition(lin_dense_poly, 2))
 
     # Extracting salt and polymer density of phases
     poly_density_P = np.mean(lin_dense_poly[mask_P])
