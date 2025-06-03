@@ -50,7 +50,7 @@ def main():
 
         # plotting 
         plt.errorbar(Ns, rgs[i], rgs_err[i], marker=".", capsize=2, linestyle="", label = f"$r_c = {cutoffs[i]}\sigma$")
-        plt.plot(Ns, fit_vals, color = fit_colors[i], linestyle=":", label = f"$R_g = aN^m$;\t $m={slopes[i]:.1f} \pm {slopes_err[i]:.1f}$")
+        plt.plot(Ns, fit_vals, color = fit_colors[i], linestyle=":", label = f"$R_g = bN^\\nu$;\t $\\nu={slopes[i]:.1f} \pm {slopes_err[i]:.1f}$")
 
     plt.yscale("log")
     plt.xscale("log")
@@ -58,6 +58,7 @@ def main():
     plt.xlabel("Number of Beads $N$")
     plt.legend()
     plt.tight_layout()
+    plt.savefig("rgs_plot.svg")
     plt.show()
 
 if __name__=="__main__":
