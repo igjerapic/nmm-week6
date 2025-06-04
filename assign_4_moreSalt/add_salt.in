@@ -1,0 +1,44 @@
+
+
+# Length of X and Z sides of the simulation box
+# Lx = Lz = 2*L
+variable      L equal 15
+variable      Lxz equal ${L}/2
+
+# Length of Y-side of the simulation box
+variable      Ly equal 50
+
+variable      slab_width equal ${Lxz}*1.5
+variable      slab_width_half equal ${slab_width}/2
+variable      slab_width_half_padded equal ${slab_width_half}+12
+
+variable      startfile string '../equilibrated.data'
+
+# number of salt beads to add
+variable      salt equal ${N_SALT}
+variable      salt_half equal round(${salt}/2)
+
+variable      finalfile string 'salt_added_${salt}.data'
+
+units         lj
+atom_style    full
+dimension     3
+boundary      p p p
+neighbor      1.0 bin
+neigh_modify  one 5000 every 1
+comm_modify   cutoff 10.0
+
+read_data     ${startfile}
+
+region        center  block -${Lxz} ${Lxz}  -${slab_width_half}  ${slab_width_half} -${Lxz} ${Lxz}
+region        left    block -${Lxz} ${Lxz}  -${Ly}              -${slab_width_half_padded} -${Lxz} ${Lxz}
+region        right   block -${Lxz} ${Lxz}   ${slab_width_half_padded}  ${Ly}              -${Lxz} ${Lxz}
+region        sides   union 2 left right
+
+create_atoms  3     random  ${salt_half}    97866 sides
+create_atoms  4     random  ${salt_half}    87439 sides
+
+mass          * 1.0
+
+write_data    ${finalfile} nofix nocoeff
+
