@@ -56,7 +56,7 @@ def main():
     poly_density_S = np.mean(lin_dense_poly[mask_S])
 
     df = {"bulk_salt_density" : 0.0,
-          "y_vals" : y_vals - 50 , # origin is at -50
+          "y_vals" : y_vals,
           "lin_dense_poly" : lin_dense_poly,
           "lin_dense_salt" : np.zeros_like(lin_dense_poly),
           "poly_dense_point": [poly_density_P, 0],

@@ -61,7 +61,7 @@ def main():
     salt_density_S = np.mean(lin_dense_salt[mask_S])
 
     df = {"bulk_salt_density" : bulk_salt_density,
-          "y_vals" : y_vals - 50,
+          "y_vals" : y_vals,
           "lin_dense_poly" : lin_dense_poly,
           "lin_dense_salt" : lin_dense_salt,
           "poly_dense_point": [poly_density_P, salt_density_P],
