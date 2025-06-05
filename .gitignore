@@ -12,6 +12,8 @@ report/out_dir/*.log
 report/out_dir/*.out
 report/out_dir/*.synctex.gz
 report/out_dir/*.toc
+report/out_dir/*.b*
+report/out_dir/*.run.xml
 report/sections
 report/figs/*.svg
 
@@ -29,11 +31,14 @@ assign_2/short_run
 assign_2/*.svg
 
 # assignment 3
-assign_3/bottlebrush
+assign_3/grafted
 assign_3/test_topos
 assign_3/linear
+assign_3/*.svg
 
 # assignment 4
 assign_4/salt*
-
+assign_4_m*/salt*
+assign_4_m*/*.svg
+assign_4_m*/*.txt
 
